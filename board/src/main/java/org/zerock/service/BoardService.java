@@ -9,4 +9,8 @@ public interface BoardService {
 
 	public List<Board> getList(PageParam param);
 	public int register(Board board);
+	public int getTotal();
+	public Board get(PageParam param);
+	public int remove(PageParam param);
+	public int modify(Board board);
 }

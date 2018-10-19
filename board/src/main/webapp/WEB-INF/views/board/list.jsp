@@ -33,7 +33,7 @@
 							<c:forEach items="${list }" var="board">
 								<tr>
 									<td><c:out value="${board.bno}" /></td>
-									<td><c:out value="${board.title}" /></td>
+									<td><a href="${board.bno}" class='board'><c:out value="${board.title}" /></a></td>
 									<td><c:out value="${board.writer}" /></td>
 									<td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss"
 											value="${board.regdate}" /></td>
@@ -55,16 +55,16 @@
 				<c:if test="${pageObj.prev}">
 					<li class="paginate_button previous disabled"
 						aria-controls="dataTables-example" tabindex="0"
-						id="dataTables-example_previous"><a href="#">Previous</a></li>
+						id="dataTables-example_previous"><a href="${pageObj.start-1 }">Previous</a></li>
 				</c:if>
 				<c:forEach begin="${pageObj.start}" end="${pageObj.end }" var="num">
 				<li class="paginate_button" data-page='${num}'
-					aria-controls="dataTables-example" tabindex="0"><a href="#"><c:out value="${num}"/></a></li>
+					aria-controls="dataTables-example" tabindex="0"><a href="${num}"><c:out value="${num}"/></a></li>
 				
 				</c:forEach>
 				<c:if test="${pageObj.next }">
 					<li class="paginate_button next" aria-controls="dataTables-example"
-						tabindex="0" id="dataTables-example_next"><a href="#">Next</a></li>
+						tabindex="0" id="dataTables-example_next"><a href="${pageObj.end+1}">Next</a></li>
 				</c:if>
 			</ul>
 		</div>
@@ -90,19 +90,46 @@
 		<!-- /.modal-dialog -->
 	</div>
 	<!-- /.modal -->
+	<form id='actionForm'>
+		<input type='hidden' name='page' id='page' value='${pageObj.page}'>
+		
+	</form>
 </div>
 
 
 <%@include file="../includes/footer.jsp"%>
 <script>
 	$(document).ready(function() {
+		
+		$('.board').on("click",function(e){
+			e.preventDefault();
+			var bno=$(this).attr('href');
+			actionForm.append("<input type='hidden' name='bno' value='"+bno+"'>")
+			actionForm.attr("action","/board/read")
+			.attr("method","get").submit();
+		});
+		
+		var actionForm=$("#actionForm");
+		
+		
+		
 		var pageNum=${pageObj.page};
 		$('.pagination li[data-page='+pageNum+']').addClass("active");
 		
+		$('.pagination li a').on("click",function(e){
+			e.preventDefault();
+			var target=$(this).attr("href");
+			$("#page").val(target);
+			actionForm.attr("action","/board/list")
+			.attr("method","get").submit();
+			
+		
+			
+		});
 		var result = '<c:out value="${result}"/>';
 		var msg = $("#myModal");
 		if (result === 'SUCCESS') {
-			$(".modal-body").html("등록이 완료되었습니다.");
+			$(".modal-body").html("작업이 완료되었습니다.");
 			msg.modal("show");
 		}
 	})

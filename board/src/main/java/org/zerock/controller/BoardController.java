@@ -24,10 +24,14 @@ public class BoardController {
 	@GetMapping("/list")
 	public void list(@ModelAttribute("pageObj")PageParam pageParam,Model model) {
 		log.info("list page..........");
-		pageParam.setTotal(123);
+		pageParam.setTotal(service.getTotal());
 		model.addAttribute("list",service.getList(pageParam));
 	}
-	
+	@GetMapping({"/read","/modify"})
+	public void read(@ModelAttribute("pageObj")PageParam pageParam,Model model) {
+		log.info("read page..........");
+		model.addAttribute("board",service.get(pageParam));
+	}
 	@GetMapping("/register")
 	public void registerGet() {
 		
@@ -38,5 +42,22 @@ public class BoardController {
 		int result=service.register(board);
 		rttr.addFlashAttribute("result",result==1?"SUCCESS":"FAILED");
 		return "redirect:/board/list";
+	}
+	
+	@PostMapping("/remove")
+	public String remove(PageParam pageParam ,RedirectAttributes rttr) {
+		
+		int result=service.remove(pageParam);
+		rttr.addFlashAttribute("result",result==1?"SUCCESS":"FAILED");
+		return "redirect:/board/list?page="+pageParam.getPage();
+	}
+
+	
+	@PostMapping("/modify")
+	public String modify(PageParam pageParam,Board board,RedirectAttributes rttr) {
+		int result=service.modify(board);
+	
+		rttr.addFlashAttribute("result",result==1?"SUCCESS":"FAILED");
+		return pageParam.getLink("redirect:/board/read");
 	}
 }

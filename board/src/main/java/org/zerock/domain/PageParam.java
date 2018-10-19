@@ -1,5 +1,8 @@
 package org.zerock.domain;
 
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import lombok.Data;
 
 @Data
@@ -8,7 +11,7 @@ public class PageParam {
 	private static final double PER = 10.0;
 	private int page;
 	private int display;
-	
+	private int bno;
 	private int total,start,end;
 	private boolean prev,next;
 	
@@ -34,5 +37,17 @@ public class PageParam {
 	public int getSkip() {
 		return (this.page-1)*10;
 		
+	}
+	public String getLink(String path) {
+		UriComponentsBuilder builder=UriComponentsBuilder.fromPath(path).queryParam("bno",this.bno).queryParam("page",this.page);
+		return builder.toUriString();
+	}
+	
+	public static void main(String[] args) {
+		PageParam obj=new PageParam();
+		
+		obj.setBno(123);
+		obj.setPage(3);
+		System.out.println(obj.getLink("redirect:/board/read"));
 	}
 }
