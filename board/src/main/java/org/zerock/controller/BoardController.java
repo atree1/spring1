@@ -24,6 +24,7 @@ public class BoardController {
 	@GetMapping("/list")
 	public void list(@ModelAttribute("pageObj")PageParam pageParam,Model model) {
 		log.info("list page..........");
+		pageParam.setDisplay(20);
 		pageParam.setTotal(service.getTotal());
 		model.addAttribute("list",service.getList(pageParam));
 	}

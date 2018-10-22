@@ -20,18 +20,7 @@ public class BoardMapperTests{
 	
 	@Test
 	public void testInsert() {
-		Board board=new Board();
-		board.setTitle("영준이형 나이는?");
-		board.setContent("30살");
-		board.setWriter("MR.J");
-		
-		log.info(mapper.insert(board));
-	}
-	@Test
-	public void testAll() {
-		//log.info(mapper.getListAll());
-		PageParam pageParam=new PageParam();
-		pageParam.setPage(3);
-		mapper.getList(pageParam).forEach(board->log.info(board));
+	
+	
 	}
 }

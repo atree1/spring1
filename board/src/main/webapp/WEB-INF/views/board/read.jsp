@@ -39,8 +39,8 @@
 				<button class="btn btn-default">목록</button>
 			</form>
 			<form role="form" action="/board/modify">
-				<input type='hidden' name='page' value='${pageObj.page}'> <input
-					type='hidden' name='bno' value='${pageObj.bno}'>
+				<input type='hidden' name='page' value='${pageObj.page}'> 
+				<input	type='hidden' name='bno' value='${pageObj.bno}'>
 				<button type="submit" class="btn btn-default">수정</button>
 			</form>
 		</div>
