@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.mapper.BoardMapper">
+	<select id="getList" parameterType="org.zerock.domain.PageParam"
+		resultType="org.zerock.domain.Board">
+ 	<![CDATA[
+ 	select *
+ 	from tbl_board
+ 	order by bno desc limit #{skip},#{display}
+ 	]]>
+	</select>
+
+	<insert id="insert" parameterType="org.zerock.domain.Board">
+		insert into
+		tbl_board(title,content,writer)
+		values(#{title},#{content},#{writer})
+	</insert>
+
+	<select id="count" resultType="int">
+
+		select count(*)
+		from tbl_board
+		where 1=1
+
+		<if test="types != null">
+			<foreach index="type" item="item" collection="cond"
+				open="AND (" close=")" separator="OR">
+				<if test="type=='t'.toString()">
+					title like concat('%',#{item},'%')
+				</if>
+				<if test="type=='c'.toString()">
+					content like concat('%',#{item},'%')
+				</if>
+				<if test="type=='w'.toString()">
+					writer like concat('%',#{item},'%')
+				</if>
+			</foreach>
+		</if>
+		<if test="!extend">
+			and bno>(select max(bno) -100000 from tbl_board)
+		</if>
+	</select>
+	<select id="get" parameterType="org.zerock.domain.PageParam"
+		resultType="org.zerock.domain.Board">
+	<![CDATA[
+	select * from tbl_board where bno=#{bno}
+	]]>
+	</select>
+
+	<delete id="delete" parameterType="org.zerock.domain.PageParam">
+	<![CDATA[
+	delete from tbl_board where bno=#{bno}
+	]]>
+	</delete>
+
+	<update id="update" parameterType="org.zerock.domain.Board">
+	<![CDATA[
+		update tbl_board set title=#{title},content=#{content}
+		where bno=#{bno}
+	]]>
+	</update>
+
+
+	<select id="search" resultType="org.zerock.domain.Board">
+		select *
+		from tbl_board
+
+		where 1=1
+		<foreach index="type" item="item" collection="cond"
+			open="AND (" close=")" separator="OR">
+			<if test="type=='t'.toString()">
+				title like concat('%',#{item},'%')
+			</if>
+			<if test="type=='c'.toString()">
+				content like concat('%',#{item},'%')
+			</if>
+			<if test="type=='w'.toString()">
+				writer like concat('%',#{item},'%')
+			</if>
+		</foreach>
+		<if test="!extend">
+			and bno>(select max(bno) -100000 from tbl_board)
+		</if>
+	</select>
+
+
+</mapper> 
+ 
