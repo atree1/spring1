@@ -29,5 +29,4 @@ public interface BoardMapper {
 	
 	public int update(Board board);
 	
-	public List<Board> search(PageParam pageParam);
 }

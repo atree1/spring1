@@ -28,30 +28,9 @@ public class BoardController {
 	@GetMapping("/list")
 	public void list(@ModelAttribute("pageObj")PageParam pageParam,Model model) {
 		log.info("list get");
-	
-		
-		if(pageParam.getTypes()!=null) {
-			String[] types=pageParam.getTypes();
-			Map<String,String> cond=new HashMap<>();
-			
-			int size=types.length;
-			for(int i=0;i<size;i++) {
-				cond.put(types[i],pageParam.getKeyword());
-			}
-			pageParam.setCond(cond);
-			pageParam.setTotal(service.getTotal(pageParam));
-			model.addAttribute("list",service.search(pageParam));
-			
-			
-		}
-		//pageParam.setDisplay(0);
-		
-		
-	else {
+		pageParam.setCond();
 		pageParam.setTotal(service.getTotal(pageParam));
 		model.addAttribute("list",service.getList(pageParam));
-		
-	}
 		log.info(pageParam);
 	}
 	
@@ -68,18 +47,19 @@ public class BoardController {
 	@GetMapping({"/read","/modify"})
 	public void read(@ModelAttribute("pageObj") PageParam pageParam ,Model model) {
 		log.info("register get.................");
+		pageParam.setCond();
 		model.addAttribute("board",service.read(pageParam));
 	}
 	@PostMapping("/modify")
 	public String modify(@ModelAttribute("pageObj")PageParam pageParam,Board board,RedirectAttributes rttr) {
 		int result=service.modify(board);
-		
+		pageParam.setCond();
 		rttr.addFlashAttribute("result",result==1?"SUCCESS":"FAILED");
 		return pageParam.getLink("redirect:/board/read");
 	}
 	@PostMapping("/remove")
 	public String remove(@ModelAttribute("pageObj")PageParam pageParam,RedirectAttributes rttr) {
-		
+		pageParam.setCond();
 		int result=service.remove(pageParam);
 		rttr.addFlashAttribute("result",result==1?"SUCCESS":"FAIL");
 		

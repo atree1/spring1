@@ -6,25 +6,9 @@
 <mapper namespace="org.zerock.mapper.BoardMapper">
 	<select id="getList" parameterType="org.zerock.domain.PageParam"
 		resultType="org.zerock.domain.Board">
- 	<![CDATA[
- 	select *
- 	from tbl_board
- 	order by bno desc limit #{skip},#{display}
- 	]]>
-	</select>
-
-	<insert id="insert" parameterType="org.zerock.domain.Board">
-		insert into
-		tbl_board(title,content,writer)
-		values(#{title},#{content},#{writer})
-	</insert>
-
-	<select id="count" resultType="int">
-
-		select count(*)
+		select *
 		from tbl_board
 		where 1=1
-
 		<if test="types != null">
 			<foreach index="type" item="item" collection="cond"
 				open="AND (" close=")" separator="OR">
@@ -39,9 +23,39 @@
 				</if>
 			</foreach>
 		</if>
-		<if test="!extend">
-			and bno>(select max(bno) -100000 from tbl_board)
+
+		and bno > (select max(bno) - 100000 from tbl_board)
+		order by bno desc limit #{skip}, 10
+	</select>
+
+	<insert id="insert" parameterType="org.zerock.domain.Board">
+		insert into
+		tbl_board(title,content,writer)
+		values(#{title},#{content},#{writer})
+	</insert>
+
+	<select id="count" resultType="int">
+
+		select count(*)
+		from tbl_board
+		where 1=1
+		<if test="types != null">
+			<foreach index="type" item="item" collection="cond"
+				open="AND (" close=")" separator="OR">
+				<if test="type=='t'.toString()">
+					title like concat('%',#{item},'%')
+				</if>
+				<if test="type=='c'.toString()">
+					content like concat('%',#{item},'%')
+				</if>
+				<if test="type=='w'.toString()">
+					writer like concat('%',#{item},'%')
+				</if>
+			</foreach>
 		</if>
+	
+			and bno>(select max(bno) -100000 from tbl_board)
+		
 	</select>
 	<select id="get" parameterType="org.zerock.domain.PageParam"
 		resultType="org.zerock.domain.Board">
@@ -64,27 +78,7 @@
 	</update>
 
 
-	<select id="search" resultType="org.zerock.domain.Board">
-		select *
-		from tbl_board
 
-		where 1=1
-		<foreach index="type" item="item" collection="cond"
-			open="AND (" close=")" separator="OR">
-			<if test="type=='t'.toString()">
-				title like concat('%',#{item},'%')
-			</if>
-			<if test="type=='c'.toString()">
-				content like concat('%',#{item},'%')
-			</if>
-			<if test="type=='w'.toString()">
-				writer like concat('%',#{item},'%')
-			</if>
-		</foreach>
-		<if test="!extend">
-			and bno>(select max(bno) -100000 from tbl_board)
-		</if>
-	</select>
 
 
 </mapper> 

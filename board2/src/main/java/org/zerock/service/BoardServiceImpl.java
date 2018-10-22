@@ -43,10 +43,6 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		return mapper.update(board);
 	}
-	@Override
-	public List<Board> search(PageParam param) {
-		// TODO Auto-generated method stub
-		return mapper.search(param);
-	}
+
 	
 }

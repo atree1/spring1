@@ -12,6 +12,4 @@ public interface BoardService {
 	public int remove(PageParam param);
 	public Board read(PageParam param);
 	public int modify(Board board);
-	public List<Board> search(PageParam param);
-
 }

@@ -50,13 +50,12 @@
 		<!-- /.panel -->
 	</div>
 	<div class='search'>
-		<div class="col-lg-12">
-		<div></div>
-			<form id='searchForm' action="/board/list" method='get'>
-			<input id='keyword' type="text" name='keyword'></input>
-			<button id='searchBtn'>검색</button>
-			</form>
-		</div>
+		<input class='type' type="checkbox" name='type' value='t'>제목 <input
+			class='type' type="checkbox" name='type' value='c'>내용 <input
+			class='type' type="checkbox" name='type' value='w'>작성자 <input
+			id='keyword' type="text" name='keyword'></input>
+		<button id='searchBtn'>검색</button>
+
 	</div>
 	<div class="col-sm-12">
 		<div class="dataTables_paginate paging_simple_numbers"
@@ -104,7 +103,10 @@
 	</div>
 	<!-- /.modal -->
 	<form id='actionForm'>
-		<input type='hidden' name='pageParam' id='page' value='${pageObj.page }'>
+		<input type='hidden' name='pageParam' id='page' value='${pageObj.page }'> 
+			<input type='hidden' name='types' value='${pageObj.types}'> 
+			<input type='hidden' name='keyword' value='${pageObj.keyword}'>
+
 	</form>
 </div>
 
@@ -112,60 +114,62 @@
 <%@include file="../includes/footer.jsp"%>
 
 <script>
-	$(document).ready(
-			function() {
-				
-			
-				var actionForm = $('#actionForm');
-				var currentNum = ${pageObj.page};
-				var searchForm=$('#searchForm');
-				$('#searchBtn').on("click",function(e){
-					e.preventDefault();
-					var type=$('.type');
-					var types=[];
-					var keyword=$('#keyword').val();
-				
+	$(document).ready(function() {
 
-					for (var i = 0; i < type.length; i++) {
-					
-						if(type[i].checked){
-						types.push(type[i].value);	
-						
-						}
-					}
-					searchForm.append("<input type='hidden' name='types' value='"+types+"'>").submit();
-					console.log(types);
-
-				})
-				;
-				
-				
-				$('.board').on('click',function(e){
-					e.preventDefault();
-					var bno=$(this).attr('href');
-					actionForm.append("<input type='hidden' name='bno' value='"+bno+"'>");
-					actionForm.attr("action",'/board/read').attr('method','get').submit();
-				});
-				$('.pagination li[data-page=' + currentNum + ']').addClass(
-						"active");
-
-				$('.pagination li a').on(
-						'click',
-						function(e) {
+						var actionForm = $('#actionForm');
+						var currentNum = ${pageObj.page};
+						var searchForm = $('#searchForm');
+						$('#searchBtn').on("click", function(e) {
 							e.preventDefault();
-							var target = $(this).attr('href');
-							$("#page").val(target);
-							actionForm.attr("action", "/board/list").attr(
-									"method", 'get').submit();
+							var type = $('.type');
+							var types = [];
+							var keyword = $('#keyword').val();
 
+							for (var i = 0; i < type.length; i++) {
+
+								if (type[i].checked) {
+									types.push(type[i].value);
+
+								}
+							}
+
+							actionForm.attr("action", "/board/list");
+							actionForm.find("input[name='types']").val(types);
+							actionForm.find("input[name='keyword']").val(keyword);
+							$("#page").val(1);
+							
+							actionForm.submit();
+							
 						});
 
-				var result = '<c:out value="${result}"/>';
-				var msg = $('#myModal');
-				if (result === 'SUCCESS') {
-					$(".modal-body").html("작업 완료 !!");
-					msg.modal("show()");
-				}
-			});
-	
+						$('.board').on('click',function(e) {
+											e.preventDefault();
+											var bno = $(this).attr('href');
+											actionForm
+													.append("<input type='hidden' name='bno' value='"+bno+"'>");
+											actionForm.attr("action",
+													'/board/read').attr(
+													'method', 'get').submit();
+										});
+						$('.pagination li[data-page=' + currentNum + ']')
+								.addClass("active");
+
+						$('.pagination li a').on(
+								'click',
+								function(e) {
+									e.preventDefault();
+									var target = $(this).attr('href');
+									$("#page").val(target);
+									actionForm.attr("action", "/board/list")
+											.attr("method", 'get').submit();
+
+								});
+
+						var result = '<c:out value="${result}"/>';
+						var msg = $('#myModal');
+						if (result === 'SUCCESS') {
+							$(".modal-body").html("작업 완료 !!");
+							msg.modal("show()");
+						}
+					});
 </script>
