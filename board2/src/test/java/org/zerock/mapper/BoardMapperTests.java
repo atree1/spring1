@@ -24,11 +24,7 @@ public class BoardMapperTests{
 	public void testInsert() {
 	
 	PageParam pageParam=new PageParam();
-	Map<String,String> cond=new HashMap<>(); 
-	cond.put("t","불금에");
 	
-	
-	pageParam.setCond(cond);
 	log.info(mapper.count(pageParam));
 	}
 }

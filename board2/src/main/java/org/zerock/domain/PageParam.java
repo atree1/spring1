@@ -40,7 +40,7 @@ public class PageParam {
 	public void setTotal(int total) {
 		this.total = total;
 		this.end = (int) (Math.ceil(this.page / this.per)) * this.display;
-		this.start = end - 9;
+		this.start = end - display+1;
 
 		if (this.end * display >= total) {
 			this.end = (int) (Math.ceil(this.total / per));
@@ -66,7 +66,7 @@ public class PageParam {
 	}
 
 	public String getLink(String path) {
-		UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path).queryParam("bno", this.bno)
+		UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path).queryParam("bno", this.bno).queryParam("types",this.types).queryParam("keyword", this.keyword)
 				.queryParam("page", this.page);
 		return builder.toUriString();
 

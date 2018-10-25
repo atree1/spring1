@@ -46,7 +46,8 @@ public class BoardController {
 	}
 	@GetMapping({"/read","/modify"})
 	public void read(@ModelAttribute("pageObj") PageParam pageParam ,Model model) {
-		log.info("register get.................");
+		log.info("read or modify get.................");
+		log.info(pageParam);
 		pageParam.setCond();
 		model.addAttribute("board",service.read(pageParam));
 	}
@@ -63,7 +64,7 @@ public class BoardController {
 		int result=service.remove(pageParam);
 		rttr.addFlashAttribute("result",result==1?"SUCCESS":"FAIL");
 		
-		return "redirect:/board/list?"+pageParam.getPage();
+		return pageParam.getLink("redirect:/board/list");
 	}
 	
 }
