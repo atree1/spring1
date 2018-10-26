@@ -30,7 +30,15 @@
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
 <script>
-
+$(".thumbs").on("click","p",function(e){
+	var obj=$(this);
+	console.log(obj);
+	
+	console.log(obj.attr("data-src"));
+	var link="/download/"+obj.attr("data-src");
+	self.location=link;
+	
+});
 $(".thumbs").on("click","img",function(e){
 	var obj=$(this);
 	console.log(obj);
@@ -69,7 +77,7 @@ $("#btn").on("click",function(e){
 				var fileSrc=(result[i].thumbName+"_"+result[i].ext).substring(2);
 				str+="<div>"
 				str+="<img data-src='"+fileSrc+"' src='"+path+"'>";
-				str+="<p>"+result[i].originName+"</p>"
+				str+="<p data-src='"+fileSrc+"'>"+result[i].originName+"</p>"
 				str+="</div>"
 			}
 			thumbs.append(str);
