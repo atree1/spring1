@@ -98,6 +98,10 @@
 				$(".modal-body").html("작업이 완료되었습니다.");
 				msg.modal("show");
 			}
+			if (result === 'FAIL') {
+				$(".modal-body").html("작업이 취소되었습니다.");
+				msg.modal("show");
+			}
 		}
 
 	});

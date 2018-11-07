@@ -55,7 +55,7 @@ public class BoardController {
 	public String modify(@ModelAttribute("pageObj")PageParam pageParam,Board board,RedirectAttributes rttr) {
 		int result=service.modify(board);
 		pageParam.setCond();
-		rttr.addFlashAttribute("result",result==1?"SUCCESS":"FAILED");
+		rttr.addFlashAttribute("result",result==1?"SUCCESS":"FAIL");
 		return pageParam.getLink("redirect:/board/read");
 	}
 	@PostMapping("/remove")
